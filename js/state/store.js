@@ -1,10 +1,11 @@
 /**
  * NIGHTNET Global State
  * Wallet, user profile, transactions, notifications, city events
+ * + Immersion, Threat, Netrunning session prefs
  * Persisted to localStorage
  */
 
-const STORAGE_KEY = 'nightnet_v1';
+const STORAGE_KEY = 'nightnet_v2';
 
 const defaultState = {
   user: {
@@ -25,14 +26,34 @@ const defaultState = {
   notifications: [],
   activeEvent: null,
   lastEventTs: 0,
+  settings: {
+    immersionLevel: 3,
+    soundEnabled: true,
+    threatLevel: 'LOW',
+  },
+  netrunner: {
+    name: 'NETRUNNER',
+    interface: 4,
+    hp: 10,
+    maxHp: 10,
+    programs: [],
+    cyberdeck: 'Basic',
+  },
+  savedArchitectures: [],
 };
 
 function load() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('nightnet_v1');
     if (!raw) return structuredClone(defaultState);
     const parsed = JSON.parse(raw);
-    return { ...structuredClone(defaultState), ...parsed, user: { ...defaultState.user, ...parsed.user } };
+    return {
+      ...structuredClone(defaultState),
+      ...parsed,
+      user: { ...defaultState.user, ...parsed.user },
+      settings: { ...defaultState.settings, ...parsed.settings },
+      netrunner: { ...defaultState.netrunner, ...parsed.netrunner },
+    };
   } catch {
     return structuredClone(defaultState);
   }
@@ -44,6 +65,9 @@ function save(state) {
       user: state.user,
       transactions: state.transactions.slice(0, 50),
       lastEventTs: state.lastEventTs,
+      settings: state.settings,
+      netrunner: state.netrunner,
+      savedArchitectures: state.savedArchitectures?.slice(0, 20) || [],
     }));
   } catch (e) {
     console.warn('NIGHTNET storage write failed', e);
@@ -92,7 +116,6 @@ export function spendCredits(amount, label) {
     ts: Date.now(),
   });
   state.user.completedContracts += 1;
-  // small reputation gain
   state.user.reputation = Math.min(100, state.user.reputation + 1);
   emit();
   return { ok: true };
@@ -139,7 +162,36 @@ export function resetDemo() {
   emit();
 }
 
-// expose for console easter egg
+export function setImmersionLevel(level) {
+  state.settings.immersionLevel = Math.max(1, Math.min(5, Number(level) || 3));
+  emit();
+  return state.settings.immersionLevel;
+}
+
+export function setThreatLevel(level) {
+  const allowed = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+  state.settings.threatLevel = allowed.includes(level) ? level : 'LOW';
+  emit();
+  return state.settings.threatLevel;
+}
+
+export function setSoundEnabled(v) {
+  state.settings.soundEnabled = !!v;
+  emit();
+}
+
+export function updateNetrunner(partial) {
+  state.netrunner = { ...state.netrunner, ...partial };
+  emit();
+}
+
+export function saveArchitectureMeta(meta) {
+  const list = state.savedArchitectures.filter(a => a.id !== meta.id);
+  list.unshift({ ...meta, savedAt: Date.now() });
+  state.savedArchitectures = list.slice(0, 20);
+  emit();
+}
+
 if (typeof window !== 'undefined') {
-  window.__NIGHTNET__ = { getState, addCredits, spendCredits, resetDemo };
+  window.__NIGHTNET__ = { getState, addCredits, spendCredits, resetDemo, setImmersionLevel, setThreatLevel };
 }
