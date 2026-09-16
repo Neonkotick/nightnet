@@ -28,6 +28,8 @@
       <div class="panel-header">NAV // TERMINAL</div>
       <div class="panel-body" style="display:flex;flex-direction:column;gap:0.4rem;">
         <button class="nav-btn active" data-view="catalog" type="button">SERVICE CATALOG</button>
+        <button class="nav-btn" data-view="netrun" type="button">NETRUN</button>
+        <button class="nav-btn" data-view="gm" type="button">GM PANEL</button>
         <button class="nav-btn" data-view="events" type="button">CITY EVENTS</button>
         <button class="nav-btn" data-view="map" type="button">DISTRICT MAP</button>
         <button class="nav-btn" data-view="profile" type="button">USER PROFILE</button>
@@ -130,6 +132,75 @@
           <div class="panel-header">NIGHT CITY NEWS</div>
           <div class="panel-body" id="news-list">
             <!-- injected -->
+          </div>
+        </div>
+      </section>
+
+      <!-- NETRUN VIEW -->
+      <section class="view" id="view-netrun" aria-label="Netrunning terminal">
+        <div class="panel">
+          <div class="panel-header">
+            <span>NETRUN // TERMINAL</span>
+            <span id="netrun-status">OFFLINE</span>
+          </div>
+          <div class="panel-body">
+            <div class="netrun-controls" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.75rem;">
+              <button class="btn" id="btn-jack-in" type="button">JACK IN</button>
+              <button class="btn btn-ghost" id="btn-jack-out" type="button">JACK OUT</button>
+              <button class="btn btn-ghost" id="btn-quick-arch" type="button">QUICK ARCH (5)</button>
+            </div>
+            <div id="netrun-floor-info" style="font-size:0.8rem;color:var(--text-dim);margin-bottom:0.75rem;">
+              No active connection. Generate or load an architecture, then JACK IN.
+            </div>
+            <div class="terminal-window" id="netrun-terminal">
+              <pre id="netrun-output" class="terminal-output">> NIGHTNET NETRUNNING MODULE READY
+> TYPE HELP AFTER JACK IN
+</pre>
+              <div class="terminal-input-row">
+                <span class="prompt">›</span>
+                <input type="text" id="netrun-input" placeholder="ENTER COMMAND..." autocomplete="off" spellcheck="false" disabled />
+              </div>
+            </div>
+            <div style="margin-top:0.75rem;font-size:0.7rem;color:var(--text-muted);">
+              Commands: SCAN · MOVE n · BREACH · DOWNLOAD · ATTACK · CLOAK · PATHFINDER · STATUS · JACK OUT · HELP
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GM PANEL VIEW -->
+      <section class="view" id="view-gm" aria-label="Game Master panel">
+        <div class="panel">
+          <div class="panel-header">GM PANEL // CONTROL</div>
+          <div class="panel-body">
+            <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;">
+              <button class="btn" id="gm-gen-arch" type="button">GENERATE ARCHITECTURE</button>
+              <button class="btn btn-ghost" id="gm-export-arch" type="button">EXPORT JSON</button>
+              <button class="btn btn-ghost" id="gm-force-jackout" type="button">FORCE JACK OUT</button>
+            </div>
+            <div class="row" style="margin-bottom:0.5rem;">
+              <span>THREAT LEVEL</span>
+              <select id="gm-threat-select" class="sort-select">
+                <option value="LOW">LOW</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HIGH">HIGH</option>
+                <option value="CRITICAL">CRITICAL</option>
+              </select>
+            </div>
+            <div class="row" style="margin-bottom:0.5rem;">
+              <span>IMMERSION</span>
+              <select id="gm-immersion-select" class="sort-select">
+                <option value="1">1 — MINIMAL</option>
+                <option value="2">2 — TACTICAL</option>
+                <option value="3" selected>3 — CINEMATIC</option>
+                <option value="4">4 — IMMERSIVE</option>
+                <option value="5">5 — FULL IFACE</option>
+              </select>
+            </div>
+            <div class="panel-header" style="margin:1rem -0.9rem 0.5rem;border-top:1px solid var(--border);">CURRENT ARCHITECTURE</div>
+            <pre id="gm-arch-preview" class="terminal-output" style="max-height:220px;overflow:auto;font-size:0.7rem;">No architecture loaded.</pre>
+            <div class="panel-header" style="margin:1rem -0.9rem 0.5rem;border-top:1px solid var(--border);">ACTIVE RUN</div>
+            <div id="gm-run-status" style="font-size:0.8rem;color:var(--text-dim);">No active netrun.</div>
           </div>
         </div>
       </section>
