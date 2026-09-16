@@ -142,3 +142,56 @@ export function getVisibleFloors(arch, knownFloorIds = []) {
   if (!arch) return [];
   return arch.floors.filter(f => !f.hidden || knownFloorIds.includes(f.id));
 }
+
+/**
+ * Builder helpers — mutate architecture in place (GM tool)
+ */
+export function addFloor(arch, { type = NODE_TYPES.PASSWORD, dv = 8, label = '', ice = [] } = {}) {
+  if (!arch?.floors) return arch;
+  const index = arch.floors.length;
+  if (index > 0) {
+    const prev = arch.floors[index - 1];
+    if (!prev.connections?.includes(index)) {
+      prev.connections = [...(prev.connections || []), index];
+    }
+  }
+  arch.floors.push({
+    id: `floor-${index}-${Date.now().toString(36)}`,
+    index,
+    type,
+    label: label || `${type.toUpperCase()} ${index}`,
+    dv: type === NODE_TYPES.LOBBY ? 0 : Math.min(12, Math.max(0, Number(dv) || 8)),
+    hidden: false,
+    ice: type === NODE_TYPES.BLACK_ICE ? (ice.length ? ice : [`ice-placeholder-${index}`]) : ice,
+    connections: [],
+    notes: '',
+  });
+  arch.updatedAt = Date.now();
+  emit(Events.ARCHITECTURE_CHANGED, { architecture: arch });
+  return arch;
+}
+
+export function removeFloor(arch, index) {
+  if (!arch?.floors || index <= 0 || index >= arch.floors.length) return arch;
+  arch.floors.splice(index, 1);
+  arch.floors.forEach((f, i) => {
+    f.index = i;
+    f.connections = (f.connections || []).filter((c) => c < arch.floors.length).map((c) => (c > index ? c - 1 : c));
+  });
+  arch.updatedAt = Date.now();
+  emit(Events.ARCHITECTURE_CHANGED, { architecture: arch });
+  return arch;
+}
+
+export function updateFloor(arch, index, patch) {
+  if (!arch?.floors?.[index]) return arch;
+  const f = arch.floors[index];
+  if (patch.type && Object.values(NODE_TYPES).includes(patch.type)) f.type = patch.type;
+  if (patch.dv != null) f.dv = Math.min(12, Math.max(0, Number(patch.dv)));
+  if (patch.label != null) f.label = String(patch.label);
+  if (patch.hidden != null) f.hidden = !!patch.hidden;
+  if (Array.isArray(patch.ice)) f.ice = patch.ice;
+  arch.updatedAt = Date.now();
+  emit(Events.ARCHITECTURE_CHANGED, { architecture: arch });
+  return arch;
+}
