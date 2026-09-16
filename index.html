@@ -12,7 +12,6 @@
 </head>
 <body>
   <div id="app">
-    <!-- TOP STATUS BAR -->
     <header class="topbar" role="banner">
       <div class="logo">NIGHTNET</div>
       <div class="status-group">
@@ -23,7 +22,6 @@
       <div class="wallet" id="wallet-display" aria-live="polite">€$ 15,750</div>
     </header>
 
-    <!-- LEFT SIDEBAR -->
     <nav class="sidebar panel" aria-label="Main navigation">
       <div class="panel-header">NAV // TERMINAL</div>
       <div class="panel-body" style="display:flex;flex-direction:column;gap:0.4rem;">
@@ -44,9 +42,7 @@
       </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <main class="main" id="main-content">
-      <!-- CATALOG VIEW -->
       <section class="view active" id="view-catalog" aria-label="Service catalog">
         <div class="panel">
           <div class="panel-header">
@@ -65,18 +61,13 @@
                 <option value="response">RESPONSE TIME</option>
               </select>
             </div>
-            <div class="filters" id="category-filters" style="margin-top:0.6rem;" role="group" aria-label="Categories">
-              <!-- chips injected -->
-            </div>
-            <div class="service-grid" id="service-grid" style="margin-top:1rem;" role="list">
-              <!-- cards injected -->
-            </div>
+            <div class="filters" id="category-filters" style="margin-top:0.6rem;" role="group" aria-label="Categories"></div>
+            <div class="service-grid" id="service-grid" style="margin-top:1rem;" role="list"></div>
             <div class="empty-state" id="empty-catalog" hidden>NO SERVICES MATCH QUERY // TRY DIFFERENT FILTERS</div>
           </div>
         </div>
       </section>
 
-      <!-- EVENTS VIEW -->
       <section class="view" id="view-events" aria-label="City events">
         <div class="panel">
           <div class="panel-header">CITY EVENTS // LIVE FEED</div>
@@ -86,31 +77,24 @@
         </div>
       </section>
 
-      <!-- MAP VIEW -->
       <section class="view" id="view-map" aria-label="District map">
         <div class="panel">
           <div class="panel-header">NIGHT CITY DISTRICTS</div>
           <div class="panel-body">
             <p style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.75rem;">SELECT DISTRICT TO UPDATE YOUR LOCATION AND SEE LOCAL HEAT.</p>
-            <div class="district-map" id="district-map" role="listbox" aria-label="Districts">
-              <!-- districts injected -->
-            </div>
+            <div class="district-map" id="district-map" role="listbox" aria-label="Districts"></div>
             <div id="district-info" style="margin-top:1rem;font-size:0.8rem;color:var(--text-dim);"></div>
           </div>
         </div>
       </section>
 
-      <!-- PROFILE VIEW -->
       <section class="view" id="view-profile" aria-label="User profile">
         <div class="panel">
           <div class="panel-header">USER PROFILE // TERMINAL</div>
-          <div class="panel-body" id="profile-body">
-            <!-- injected -->
-          </div>
+          <div class="panel-body" id="profile-body"></div>
         </div>
       </section>
 
-      <!-- WALLET VIEW -->
       <section class="view" id="view-wallet" aria-label="Digital wallet">
         <div class="panel">
           <div class="panel-header">DIGITAL WALLET // EURODOLLARS</div>
@@ -126,17 +110,13 @@
         </div>
       </section>
 
-      <!-- NEWS VIEW -->
       <section class="view" id="view-news" aria-label="Night City news">
         <div class="panel">
           <div class="panel-header">NIGHT CITY NEWS</div>
-          <div class="panel-body" id="news-list">
-            <!-- injected -->
-          </div>
+          <div class="panel-body" id="news-list"></div>
         </div>
       </section>
 
-      <!-- NETRUN VIEW -->
       <section class="view" id="view-netrun" aria-label="Netrunning terminal">
         <div class="panel">
           <div class="panel-header">
@@ -168,7 +148,6 @@
         </div>
       </section>
 
-      <!-- GM PANEL VIEW -->
       <section class="view" id="view-gm" aria-label="Game Master panel">
         <div class="panel">
           <div class="panel-header">GM PANEL // CONTROL</div>
@@ -197,16 +176,32 @@
                 <option value="5">5 — FULL IFACE</option>
               </select>
             </div>
-            <div class="panel-header" style="margin:1rem -0.9rem 0.5rem;border-top:1px solid var(--border);">CURRENT ARCHITECTURE</div>
+            <div class="panel-header" style="margin:1rem -0.9rem 0.5rem;border-top:1px solid var(--border);">ARCHITECTURE BUILDER</div>
+            <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.6rem;align-items:center;">
+              <select id="gm-floor-type" class="sort-select">
+                <option value="password">PASSWORD</option>
+                <option value="file">FILE</option>
+                <option value="control">CONTROL</option>
+                <option value="black_ice">BLACK ICE</option>
+                <option value="daemon">DAEMON</option>
+                <option value="system">SYSTEM</option>
+              </select>
+              <input id="gm-floor-dv" type="number" min="0" max="12" value="8" class="sort-select" style="width:4rem;" title="DV" />
+              <button class="btn" id="gm-add-floor" type="button">+ FLOOR</button>
+              <button class="btn btn-ghost" id="gm-remove-floor" type="button">− LAST</button>
+            </div>
             <pre id="gm-arch-preview" class="terminal-output" style="max-height:220px;overflow:auto;font-size:0.7rem;">No architecture loaded.</pre>
             <div class="panel-header" style="margin:1rem -0.9rem 0.5rem;border-top:1px solid var(--border);">ACTIVE RUN</div>
             <div id="gm-run-status" style="font-size:0.8rem;color:var(--text-dim);">No active netrun.</div>
+            <p style="margin-top:0.75rem;font-size:0.65rem;color:var(--text-muted);">
+              ICE stats are HOMEBREW placeholders. Use official CRB values at the table.
+              Interface + 1d10 vs DV is the core check model.
+            </p>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- RIGHT ASIDE -->
     <aside class="aside">
       <div class="panel">
         <div class="panel-header">ACTIVE ALERTS</div>
@@ -238,7 +233,6 @@
     </aside>
   </div>
 
-  <!-- MODAL -->
   <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
     <div class="modal" id="service-modal">
       <div class="modal-header">
@@ -252,10 +246,8 @@
     </div>
   </div>
 
-  <!-- TOASTS -->
   <div id="toasts" aria-live="polite"></div>
 
-  <!-- SECRET TERMINAL (easter egg) -->
   <div id="secret-terminal" aria-hidden="true">
     <pre id="secret-output"></pre>
     <input id="secret-input" type="text" placeholder="TYPE COMMAND..." style="width:100%;background:#000;border:1px solid #0f0;color:#0f0;padding:0.5rem;font-family:inherit;margin-top:1rem;" />
