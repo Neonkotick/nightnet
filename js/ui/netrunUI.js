@@ -1,13 +1,14 @@
 /**
  * Netrun Terminal + GM Panel UI handlers
- * PHASE 3 integration layer
+ * PHASE 3 + builder + PHASE 6 integration
  */
 import { getState, setImmersionLevel as storeSetImmersion, setThreatLevel as storeSetThreat } from '../state/store.js';
 import { on, Events } from '../core/eventBus.js';
 import { jackIn, jackOut, handleCommand, isRunning, getActiveRun } from '../netrunning/runner.js';
 import {
   createQuickArchitecture, forceThreat, forceJackOut, getGMSnapshot,
-  exportCurrentArch, getCurrentArchitecture
+  exportCurrentArch, getCurrentArchitecture,
+  gmAddFloor, gmRemoveFloor, createBlankArchitecture
 } from '../gm/panel.js';
 import { setImmersionLevel } from './immersion.js';
 
@@ -208,6 +209,26 @@ export function initNetrunUI() {
     storeSetImmersion(lvl);
     toast(`IMMERSION LEVEL ${lvl}`, 'info');
     log(`IMMERSION → ${lvl}`);
+  });
+
+  $('#gm-add-floor')?.addEventListener('click', () => {
+    const type = $('#gm-floor-type')?.value || 'password';
+    const dv = Number($('#gm-floor-dv')?.value) || 8;
+    if (!getCurrentArchitecture()) createBlankArchitecture('CUSTOM ARCH');
+    gmAddFloor({ type, dv });
+    toast(`FLOOR ADDED: ${type.toUpperCase()} DV${dv}`, 'success');
+    renderGM();
+  });
+
+  $('#gm-remove-floor')?.addEventListener('click', () => {
+    const arch = getCurrentArchitecture();
+    if (!arch || arch.floors.length <= 1) {
+      toast('CANNOT REMOVE LOBBY', 'error');
+      return;
+    }
+    gmRemoveFloor(arch.floors.length - 1);
+    toast('LAST FLOOR REMOVED', 'info');
+    renderGM();
   });
 
   on(Events.JACK_IN, () => { renderNetrun(); renderGM(); });
