@@ -1,17 +1,11 @@
 /**
- * GM Panel — stub (PHASE 7 will expand)
- *
- * GM can:
- * - View / load architectures
- * - Set threat level
- * - Force events
- * - See player position (when run is active)
- *
- * Player never sees this view.
+ * GM Panel — architectures, threat, force events, simple builder
  */
-
 import { emit, Events } from '../core/eventBus.js';
-import { generateSimpleArchitecture, exportArchitecture, importArchitecture } from '../netrunning/architecture.js';
+import {
+  generateSimpleArchitecture, exportArchitecture, importArchitecture,
+  addFloor, removeFloor, updateFloor, NODE_TYPES, createEmptyArchitecture
+} from '../netrunning/architecture.js';
 import { getActiveRun, setThreat, jackOut } from '../netrunning/runner.js';
 import { getState, setThreatLevel, saveArchitectureMeta } from '../state/store.js';
 
@@ -40,6 +34,28 @@ export function createQuickArchitecture(options = {}) {
   return loadArchitecture(arch);
 }
 
+export function createBlankArchitecture(name = 'CUSTOM ARCH') {
+  return loadArchitecture(createEmptyArchitecture(name));
+}
+
+export function gmAddFloor(opts) {
+  if (!currentArch) createBlankArchitecture();
+  addFloor(currentArch, opts);
+  return currentArch;
+}
+
+export function gmRemoveFloor(index) {
+  if (!currentArch) return null;
+  removeFloor(currentArch, index);
+  return currentArch;
+}
+
+export function gmUpdateFloor(index, patch) {
+  if (!currentArch) return null;
+  updateFloor(currentArch, index, patch);
+  return currentArch;
+}
+
 export function forceThreat(level) {
   setThreatLevel(level);
   setThreat(level);
@@ -60,9 +76,6 @@ export function forceJackOut() {
   return false;
 }
 
-/**
- * Snapshot for GM UI
- */
 export function getGMSnapshot() {
   const run = getActiveRun();
   const state = getState();
@@ -81,6 +94,7 @@ export function getGMSnapshot() {
       : null,
     settings: state.settings,
     savedArchitectures: state.savedArchitectures || [],
+    nodeTypes: Object.values(NODE_TYPES),
   };
 }
 
