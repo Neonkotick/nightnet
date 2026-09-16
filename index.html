@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="NIGHTNET — Night City Service Network. Order trauma response, mercs, netrunners and more." />
+  <title>NIGHTNET // Night City Service Network</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- TOP STATUS BAR -->
+    <header class="topbar" role="banner">
+      <div class="logo">NIGHTNET</div>
+      <div class="status-group">
+        <span><span class="indicator" aria-hidden="true"></span>CITY STATUS: <strong>ONLINE</strong></span>
+        <span>DISTRICT: <strong id="current-district">WATSON</strong></span>
+        <span>SYSTEM: <strong>OPERATIONAL</strong></span>
+      </div>
+      <div class="wallet" id="wallet-display" aria-live="polite">€$ 15,750</div>
+    </header>
+
+    <!-- LEFT SIDEBAR -->
+    <nav class="sidebar panel" aria-label="Main navigation">
+      <div class="panel-header">NAV // TERMINAL</div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:0.4rem;">
+        <button class="nav-btn active" data-view="catalog" type="button">SERVICE CATALOG</button>
+        <button class="nav-btn" data-view="events" type="button">CITY EVENTS</button>
+        <button class="nav-btn" data-view="map" type="button">DISTRICT MAP</button>
+        <button class="nav-btn" data-view="profile" type="button">USER PROFILE</button>
+        <button class="nav-btn" data-view="wallet" type="button">DIGITAL WALLET</button>
+        <button class="nav-btn" data-view="news" type="button">NIGHT CITY NEWS</button>
+      </div>
+      <div class="panel-body" style="border-top:1px solid var(--border);margin-top:0.5rem;">
+        <div class="ad-block">
+          <strong>BUY YOURSELF A NEW LIFE.</strong>
+          CYBERWARE FROM €$ 1,200
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main" id="main-content">
+      <!-- CATALOG VIEW -->
+      <section class="view active" id="view-catalog" aria-label="Service catalog">
+        <div class="panel">
+          <div class="panel-header">
+            <span>AVAILABLE SERVICES</span>
+            <span id="service-count">0 ONLINE</span>
+          </div>
+          <div class="panel-body">
+            <div class="filters" role="search">
+              <input type="search" id="search-input" placeholder="SEARCH SERVICES..." aria-label="Search services" />
+              <select class="sort-select" id="sort-select" aria-label="Sort by">
+                <option value="popularity">POPULARITY</option>
+                <option value="price">PRICE ↑</option>
+                <option value="price-desc">PRICE ↓</option>
+                <option value="rating">RATING</option>
+                <option value="risk">RISK</option>
+                <option value="response">RESPONSE TIME</option>
+              </select>
+            </div>
+            <div class="filters" id="category-filters" style="margin-top:0.6rem;" role="group" aria-label="Categories">
+              <!-- chips injected -->
+            </div>
+            <div class="service-grid" id="service-grid" style="margin-top:1rem;" role="list">
+              <!-- cards injected -->
+            </div>
+            <div class="empty-state" id="empty-catalog" hidden>NO SERVICES MATCH QUERY // TRY DIFFERENT FILTERS</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EVENTS VIEW -->
+      <section class="view" id="view-events" aria-label="City events">
+        <div class="panel">
+          <div class="panel-header">CITY EVENTS // LIVE FEED</div>
+          <div class="panel-body" id="events-container">
+            <p class="empty-state">SCANNING NETWORK FOR ACTIVITY...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAP VIEW -->
+      <section class="view" id="view-map" aria-label="District map">
+        <div class="panel">
+          <div class="panel-header">NIGHT CITY DISTRICTS</div>
+          <div class="panel-body">
+            <p style="font-size:0.75rem;color:var(--text-dim);margin-bottom:0.75rem;">SELECT DISTRICT TO UPDATE YOUR LOCATION AND SEE LOCAL HEAT.</p>
+            <div class="district-map" id="district-map" role="listbox" aria-label="Districts">
+              <!-- districts injected -->
+            </div>
+            <div id="district-info" style="margin-top:1rem;font-size:0.8rem;color:var(--text-dim);"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE VIEW -->
+      <section class="view" id="view-profile" aria-label="User profile">
+        <div class="panel">
+          <div class="panel-header">USER PROFILE // TERMINAL</div>
+          <div class="panel-body" id="profile-body">
+            <!-- injected -->
+          </div>
+        </div>
+      </section>
+
+      <!-- WALLET VIEW -->
+      <section class="view" id="view-wallet" aria-label="Digital wallet">
+        <div class="panel">
+          <div class="panel-header">DIGITAL WALLET // EURODOLLARS</div>
+          <div class="panel-body">
+            <div style="font-size:1.4rem;color:var(--neon-yellow);margin-bottom:1rem;" id="wallet-big">€$ 15,750</div>
+            <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+              <button class="btn" id="btn-claim" type="button">CLAIM TEST CREDITS (+€$ 5,000)</button>
+              <button class="btn btn-ghost" id="btn-reset" type="button">RESET DEMO</button>
+            </div>
+            <div class="panel-header" style="margin:0 -0.9rem 0.5rem;border-top:1px solid var(--border);">TRANSACTION HISTORY</div>
+            <div id="tx-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEWS VIEW -->
+      <section class="view" id="view-news" aria-label="Night City news">
+        <div class="panel">
+          <div class="panel-header">NIGHT CITY NEWS</div>
+          <div class="panel-body" id="news-list">
+            <!-- injected -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- RIGHT ASIDE -->
+    <aside class="aside">
+      <div class="panel">
+        <div class="panel-header">ACTIVE ALERTS</div>
+        <div class="panel-body" id="aside-alerts">
+          <p style="font-size:0.7rem;color:var(--text-muted);">NO CRITICAL ALERTS</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">STREET ADS</div>
+        <div class="panel-body">
+          <div class="ad-block">
+            <strong>NEED A JOB?</strong>
+            FIXERS ARE WAITING.
+          </div>
+          <div class="ad-block" style="margin-top:0.5rem;">
+            <strong>ARASAKA SECURITY</strong>
+            PROTECT WHAT MATTERS.
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">SYSTEM LOG</div>
+        <div class="panel-body" id="sys-log" style="font-size:0.65rem;color:var(--text-muted);max-height:140px;overflow-y:auto;">
+          <div>> NIGHTNET BOOT SEQUENCE COMPLETE</div>
+          <div>> AUTH NODE: ONLINE</div>
+          <div>> SERVICE GRID: SYNCHRONIZED</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal" id="service-modal">
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-title">SERVICE</h2>
+          <div style="font-size:0.7rem;color:var(--text-dim);margin-top:0.2rem;" id="modal-status">STATUS: AVAILABLE</div>
+        </div>
+        <button class="modal-close" id="modal-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- TOASTS -->
+  <div id="toasts" aria-live="polite"></div>
+
+  <!-- SECRET TERMINAL (easter egg) -->
+  <div id="secret-terminal" aria-hidden="true">
+    <pre id="secret-output"></pre>
+    <input id="secret-input" type="text" placeholder="TYPE COMMAND..." style="width:100%;background:#000;border:1px solid #0f0;color:#0f0;padding:0.5rem;font-family:inherit;margin-top:1rem;" />
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
