@@ -94,10 +94,68 @@ export function handleCommand(rawInput) {
         type: 'success',
       };
     }
+    return {
+      success: false,
+      message: `INVALID FLOOR INDEX. Valid: 0–${floors.length - 1}`,
+      type: 'error',
+    };
+  }
+
+  if (result.action === 'scan') {
+    const floor = activeRun.architecture.floors[activeRun.currentFloorIndex];
+    const iceNote = floor.ice?.length ? ` · ICE PRESENT (${floor.ice.length})` : '';
+    return {
+      success: true,
+      message: `SCAN: ${floor.label || floor.type} · DV ${floor.dv}${iceNote}\nConnections: [${(floor.connections || []).join(', ')}]`,
+      type: 'info',
+      action: 'scan',
+    };
+  }
+
+  if (result.action === 'pathfinder') {
+    const floors = activeRun.architecture.floors;
+    const lines = floors.map((f, i) => {
+      const known = activeRun.knownFloors.includes(f.id) || i === 0;
+      return known
+        ? `  [${i}] ${f.type.toUpperCase()} DV${f.dv}`
+        : `  [${i}] ????`;
+    });
+    return {
+      success: true,
+      message: 'PATHFINDER RESULT:\n' + lines.join('\n') + '\n(Full reveal requires Interface check — PHASE 6)',
+      type: 'info',
+      action: 'pathfinder',
+    };
+  }
+
+  if (result.action === 'cloak') {
+    activeRun.cloaked = true;
+    return {
+      success: true,
+      message: 'CLOAK ENGAGED. Presence masked.',
+      type: 'success',
+      action: 'cloak',
+    };
   }
 
   if (result.action === 'jack_out') {
     jackOut('command');
+    return {
+      success: true,
+      message: 'JACK OUT INITIATED. Connection closed.',
+      type: 'info',
+      action: 'jack_out',
+    };
+  }
+
+  if (['breach', 'download', 'control', 'attack', 'slide'].includes(result.action)) {
+    return {
+      success: true,
+      message: `${result.action.toUpperCase()} — full resolution in PHASE 6 (DV rolls + ICE combat). Command accepted.`,
+      type: 'info',
+      action: result.action,
+      args: result.args,
+    };
   }
 
   return result;
