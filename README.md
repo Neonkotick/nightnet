@@ -1,42 +1,50 @@
 # NIGHTNET // Night City Service Network
 
-**Interactive cyberpunk urban service portal**  
-Feel like you just jacked into a restricted Night City corporate/underground network terminal.
+**Interactive cyberpunk terminal + Cyberpunk RED tabletop RPG tool**
+
+Feel like you just jacked into a restricted Night City network — then use it at the table for Netrunning, Trauma Team calls and GM tools.
 
 ## Live Demo
 
 **https://neonkotick.github.io/nightnet/**
 
-(If the link shows 404 — wait 1–2 minutes after the first deploy or go to repository Settings → Pages and make sure source is set to GitHub Actions.)
+## Status
+
+**PHASE 3 — Architecture Foundation** (in progress)
+
+| Module              | Status        |
+|---------------------|---------------|
+| Service Catalog     | ✅ Complete   |
+| Wallet / Profile    | ✅ Complete   |
+| City Events / Map   | ✅ Complete   |
+| Event Bus           | ✅ Foundation |
+| Command Sandbox     | ✅ Foundation |
+| Immersion Levels    | ✅ Foundation |
+| Net Architecture    | 🟡 Stub       |
+| Netrunning Runner   | 🟡 Stub       |
+| GM Panel            | 🟡 Stub       |
+| Trauma Team         | 🟡 Basic      |
+| Black ICE / Combat  | ⏳ Planned    |
+| Architecture Builder| ⏳ Planned    |
 
 ## Concept
 
-NIGHTNET is a fully interactive entertainment site that simulates ordering black-market and corporate services in a futuristic megacity.  
-No real payments. Pure atmosphere + demo interaction.
+NIGHTNET is evolving from an atmospheric Night City service portal into a **practical tool for Cyberpunk RED tabletop sessions**:
 
-## Features
+- Interactive **Netrunning** terminal (Jack In → navigate floors → commands)
+- **GM Panel** for architectures, threat level, force events
+- **Trauma Team** emergency response UI
+- Immersion levels (presentation only — never changes official rules)
+- Extensible service architecture
 
-- **Service Catalog** — 24+ services across Medical, Security, Mercenary, Netrunner, Transport, Underground, Information
-- **Filtering & Search** — by category, price, risk, rating, response time
-- **Service Details Modal** — with glitch, scan effects, request flow
-- **Digital Wallet** — Eurodollars balance, spend on services, transaction history
-- **User Profile** — reputation, completed contracts, district, status
-- **City Events** — dynamic random alerts with response options
-- **News Feed** — live-feeling Night City headlines
-- **Advertisements** — ambient corporate & street ads
-- **District Map** — stylized interactive districts
-- **Easter Eggs** — Konami-style, secret terminal, hidden service
-- **Sound Architecture** — ready for SFX (click, alert, confirm, glitch)
-- **Responsive** — desktop / tablet / mobile
-- **Accessibility** — keyboard, reduced-motion, ARIA, contrast
+All hacking is **game simulation only**. No real network access, no eval of user code, no shell commands.
 
 ## Tech Stack
 
 - Vanilla HTML / CSS / JS (ES modules)
 - No framework bloat
-- CSS custom properties for neon theme
-- LocalStorage for wallet & profile persistence
-- Pure data-driven services
+- LocalStorage persistence
+- GitHub Pages deploy
 
 ## Quick Start
 
@@ -46,26 +54,33 @@ cd nightnet
 npx serve .
 ```
 
-Or just open the live link above.
+Or open the live link above.
 
-## Architecture
+## Architecture (PHASE 3)
 
 ```
-/
-├── index.html          # Entry + terminal shell
-├── css/
-│   └── main.css        # Neon theme, HUD, animations, responsive
-├── js/
-│   ├── main.js         # App bootstrap
-│   ├── data/
-│   │   └── services.js # Configurable service database
-│   ├── state/
-│   │   └── store.js    # Wallet, user, transactions, events
-│   └── utils/
-│       └── sound.js    # Sound architecture (stub)
-└── .github/workflows/
-    └── deploy-pages.yml
+js/
+├── core/
+│   ├── eventBus.js          # Pub/sub
+│   └── commandSandbox.js    # Safe command whitelist
+├── netrunning/
+│   ├── architecture.js      # Net Arch model
+│   └── runner.js            # Jack in / out / commands
+├── gm/
+│   └── panel.js             # GM controls stub
+├── ui/
+│   └── immersion.js         # Immersion 1–5
+├── state/store.js
+├── data/services.js
+└── main.js
 ```
+
+## Legal / IP
+
+Cyberpunk RED is © R. Talsorian Games.  
+This is an **unofficial fan tool** for tabletop play.  
+No official images or large copyrighted rule excerpts are included.  
+Homebrew / optional features are clearly marked.
 
 ## License
 
@@ -75,4 +90,4 @@ MIT — free to fork and expand.
 
 **STATUS: ONLINE**  
 **DISTRICT: NIGHT CITY**  
-**SYSTEM: OPERATIONAL**
+**SYSTEM: OPERATIONAL // PHASE 3**
