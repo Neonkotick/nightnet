@@ -3,6 +3,12 @@
 **Interactive cyberpunk urban service portal**  
 Feel like you just jacked into a restricted Night City corporate/underground network terminal.
 
+## Live Demo
+
+**https://neonkotick.github.io/nightnet/**
+
+(If the link shows 404 — wait 1–2 minutes after the first deploy or go to repository Settings → Pages and make sure source is set to GitHub Actions.)
+
 ## Concept
 
 NIGHTNET is a fully interactive entertainment site that simulates ordering black-market and corporate services in a futuristic megacity.  
@@ -10,7 +16,7 @@ No real payments. Pure atmosphere + demo interaction.
 
 ## Features
 
-- **Service Catalog** — 16+ services across Medical, Security, Mercenary, Netrunner, Transport, Underground, Information
+- **Service Catalog** — 24+ services across Medical, Security, Mercenary, Netrunner, Transport, Underground, Information
 - **Filtering & Search** — by category, price, risk, rating, response time
 - **Service Details Modal** — with glitch, scan effects, request flow
 - **Digital Wallet** — Eurodollars balance, spend on services, transaction history
@@ -37,11 +43,10 @@ No real payments. Pure atmosphere + demo interaction.
 ```bash
 git clone https://github.com/Neonkotick/nightnet.git
 cd nightnet
-# Open index.html in browser or use any static server
 npx serve .
 ```
 
-Or deploy to GitHub Pages / Vercel / Netlify — pure static.
+Or just open the live link above.
 
 ## Architecture
 
@@ -56,27 +61,11 @@ Or deploy to GitHub Pages / Vercel / Netlify — pure static.
 │   │   └── services.js # Configurable service database
 │   ├── state/
 │   │   └── store.js    # Wallet, user, transactions, events
-│   ├── ui/
-│   │   ├── catalog.js
-│   │   ├── modal.js
-│   │   ├── wallet.js
-│   │   ├── profile.js
-│   │   ├── events.js
-│   │   ├── news.js
-│   │   └── map.js
 │   └── utils/
-│       ├── sound.js    # Sound architecture (stub)
-│       └── glitch.js
-└── README.md
+│       └── sound.js    # Sound architecture (stub)
+└── .github/workflows/
+    └── deploy-pages.yml
 ```
-
-## Development Priority
-
-1. Working demo
-2. Clean architecture
-3. UX & atmosphere
-4. Interactivity
-5. Performance & a11y
 
 ## License
 
